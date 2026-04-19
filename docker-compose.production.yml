@@ -13,7 +13,7 @@ services:
       - USER=${POSTGRES_USER}
       - PASSWORD=${POSTGRES_PASSWORD}
       - DATABASE=pos_ekantah
-    command: ["odoo", "-d", "pos_ekantah", "--without-demo=all"]
+    # command: ["odoo", "-d", "pos_ekantah", "--without-demo=all"]
     volumes:
       - odoo-web-data:/var/lib/odoo
       - ./config:/etc/odoo
