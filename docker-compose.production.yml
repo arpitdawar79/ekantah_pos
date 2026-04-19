@@ -1,0 +1,28 @@
+# version: "3.8"
+
+services:
+  web:
+    image: odoo:19
+    container_name: pos-web
+    restart: always
+    ports:
+      - "8069:8069"
+    environment:
+      - HOST=pixopie-postgres
+      - PORT=5432
+      - USER=${POSTGRES_USER}
+      - PASSWORD=${POSTGRES_PASSWORD}
+      # - DB_NAME=${POSTGRES_DB}
+    volumes:
+      - odoo-web-data:/var/lib/odoo
+      - ./config:/etc/odoo
+      - ./custom_addons:/mnt/extra-addons
+    networks:
+      - pixopie-shared
+
+volumes:
+  odoo-web-data:
+
+networks:
+  pixopie-shared:
+    external: true
