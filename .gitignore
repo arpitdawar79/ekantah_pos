@@ -63,3 +63,4 @@ htmlcov/
 *.temp
 __pycache__/
 *.pyc
+security_commands.md

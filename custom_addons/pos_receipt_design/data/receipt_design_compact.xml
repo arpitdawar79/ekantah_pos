@@ -13,7 +13,7 @@
         <field name="author">Ekantah</field>
         <field name="notes">Thermal printer optimized Bebas Neue design with bold compact layout and modern line items.</field>
         <field name="receipt_design"><![CDATA[
-<div class="pos-receipt" style="width:280px;font-family:'Helvetica Neue','Arial',sans-serif;color:#000;background:#fff;padding:4px;margin:0;line-height:1.15;letter-spacing:0;">
+<div class="pos-receipt" style="width:280px;font-family:'Helvetica Neue','Arial',sans-serif;color:#000;background:#fff;padding:4px 12px 4px 4px;margin:0;line-height:1.15;letter-spacing:0;">
 
     <!-- ═══ HEADER ═══ -->
     <div style="text-align:center;padding:2px 0;border-bottom:2px solid #000;">
@@ -190,17 +190,6 @@
                     <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:12px;letter-spacing:1px;color:#000;" t-esc="coupon.code"/>
                 </div>
             </t>
-        </div>
-    </t>
-
-    <!-- QR -->
-    <t t-if="receipt.pos_qr_code">
-        <div style="text-align:center;padding:1px 0;border-top:1px solid #000;">
-            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:10px;letter-spacing:2px;color:#000;">INVOICE QR</div>
-            <div t-if="props.data.headerData.company and ['qr_code','qr_code_and_url'].includes(props.data.headerData.company.point_of_sale_ticket_portal_url_display_mode)">
-                <img t-att-src="receipt.pos_qr_code" style="max-width:70px;" alt="QR"/>
-            </div>
-            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:11px;letter-spacing:1px;color:#000;"><t t-esc="receipt.ticket_code"/></div>
         </div>
     </t>
 
