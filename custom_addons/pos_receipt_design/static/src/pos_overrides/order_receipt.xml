@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <!--
+        Override the default OrderReceipt template.
+        When custom receipt is enabled AND the JS patch produced markup,
+        we render the custom HTML; otherwise the original receipt shows.
+    -->
+    <t t-name="pos_receipt_design.OrderReceipt"
+       t-inherit="point_of_sale.OrderReceipt"
+       t-inherit-mode="extension">
+
+        <!-- Hide the default receipt div when custom is active -->
+        <xpath expr="//div[hasclass('pos-receipt')]" position="attributes">
+            <attribute name="t-if">!this.pos.config.use_custom_receipt or !this.customReceiptMarkup</attribute>
+        </xpath>
+
+        <!-- Insert custom receipt before the default one -->
+        <xpath expr="//div[hasclass('pos-receipt')]" position="before">
+            <t t-if="this.pos.config.use_custom_receipt and this.customReceiptMarkup">
+                <div class="pos-receipt pos-custom-receipt" t-out="this.customReceiptMarkup"/>
+            </t>
+        </xpath>
+
+    </t>
+
+</templates>

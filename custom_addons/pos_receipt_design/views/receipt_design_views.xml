@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!--  CATEGORY VIEWS                                               -->
+    <!-- ============================================================ -->
+    <record id="receipt_design_category_tree" model="ir.ui.view">
+        <field name="name">receipt.design.category.list</field>
+        <field name="model">receipt.design.category</field>
+        <field name="arch" type="xml">
+            <list string="Categories">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="design_count"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="receipt_design_category_form" model="ir.ui.view">
+        <field name="name">receipt.design.category.form</field>
+        <field name="model">receipt.design.category</field>
+        <field name="arch" type="xml">
+            <form string="Category">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="sequence"/>
+                            <field name="color" widget="color_picker"/>
+                        </group>
+                        <group>
+                            <field name="design_count"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_receipt_design_category" model="ir.actions.act_window">
+        <field name="name">Categories</field>
+        <field name="res_model">receipt.design.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!--  RECEIPT DESIGN LIST                                          -->
+    <!-- ============================================================ -->
+    <record id="receipt_design_tree_view" model="ir.ui.view">
+        <field name="name">receipt.design.list</field>
+        <field name="model">receipt.design</field>
+        <field name="arch" type="xml">
+            <list string="Receipt Designs" decoration-muted="not active" decoration-success="is_default">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="version"/>
+                <field name="usage_count"/>
+                <field name="last_used"/>
+                <field name="is_default"/>
+                <field name="active" widget="boolean_toggle"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!--  RECEIPT DESIGN KANBAN                                        -->
+    <!-- ============================================================ -->
+    <record id="receipt_design_kanban_view" model="ir.ui.view">
+        <field name="name">receipt.design.kanban</field>
+        <field name="model">receipt.design</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" default_group_by="category_id">
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="version"/>
+                <field name="is_default"/>
+                <field name="usage_count"/>
+                <field name="active"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <strong t-out="record.name.value"/>
+                                <span t-if="record.is_default.raw_value"
+                                      class="badge text-bg-success">Default</span>
+                            </div>
+                            <div class="text-muted small">
+                                v<t t-out="record.version.value"/> ·
+                                <t t-out="record.usage_count.value"/> prints
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!--  SEARCH VIEW                                                  -->
+    <!-- ============================================================ -->
+    <record id="receipt_design_search_view" model="ir.ui.view">
+        <field name="name">receipt.design.search</field>
+        <field name="model">receipt.design</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="category_id"/>
+                <separator/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <filter string="System Templates" name="system" domain="[('is_system_template', '=', True)]"/>
+                <filter string="Default" name="default" domain="[('is_default', '=', True)]"/>
+                <separator/>
+                <separator string="Group By"/>
+                <group>
+                    <filter string="Category" name="group_category" context="{'group_by': 'category_id'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!--  FORM VIEW                                                    -->
+    <!-- ============================================================ -->
+    <record id="receipt_design_form_view" model="ir.ui.view">
+        <field name="name">receipt.design.form</field>
+        <field name="model">receipt.design</field>
+        <field name="arch" type="xml">
+            <form string="Receipt Design">
+                <header>
+                    <button name="action_preview" string="Preview"
+                            type="object" class="btn-primary" icon="fa-eye"/>
+                    <button name="action_set_default" string="Set as Default"
+                            type="object" class="btn-secondary" icon="fa-star"
+                            invisible="is_default"/>
+                    <button name="action_duplicate" string="Duplicate"
+                            type="object" class="btn-secondary" icon="fa-copy"/>
+                    <button name="action_export" string="Export"
+                            type="object" class="btn-secondary" icon="fa-download"/>
+                    <field name="active" widget="boolean_toggle"
+                           options="{'autosave': False}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-bar-chart"
+                                name="action_update_usage" type="object">
+                            <field name="usage_count" widget="statinfo"
+                                   string="Prints"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Default"
+                            invisible="not is_default"
+                            bg_color="text-bg-success"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Template Name…"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="category_id"/>
+                            <field name="is_default"/>
+                            <field name="is_system_template" readonly="1"/>
+                            <field name="version"/>
+                        </group>
+                        <group>
+                            <field name="author"/>
+                            <field name="created_date"/>
+                            <field name="last_used"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Template Design" name="design">
+                            <field name="receipt_design" widget="ace"
+                                   options="{'mode': 'xml'}" nolabel="1"/>
+                        </page>
+                        <page string="Styling (CSS)" name="styling">
+                            <field name="custom_css" widget="ace"
+                                   options="{'mode': 'css'}" nolabel="1"/>
+                        </page>
+                        <page string="Header / Footer" name="header_footer">
+                            <group>
+                                <field name="custom_header"/>
+                                <field name="custom_footer"/>
+                            </group>
+                        </page>
+                        <page string="Barcodes &amp; QR" name="barcodes">
+                            <group>
+                                <group>
+                                    <field name="show_order_barcode"/>
+                                    <field name="show_order_qr"/>
+                                </group>
+                                <group>
+                                    <field name="qr_code_content"/>
+                                    <field name="custom_qr_url"
+                                           invisible="qr_code_content != 'custom'"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" nolabel="1" placeholder="Internal notes about this template…"/>
+                        </page>
+                        <page string="Import / Export" name="import_export">
+                            <group>
+                                <field name="design_filename" invisible="1"/>
+                                <field name="design_file" filename="design_filename"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!--  ACTION                                                       -->
+    <!-- ============================================================ -->
+    <record id="receipt_design_action_window" model="ir.actions.act_window">
+        <field name="name">Receipt Designs</field>
+        <field name="res_model">receipt.design</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="receipt_design_search_view"/>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first receipt design!
+            </p>
+            <p>
+                Design custom receipt templates with XML, custom CSS, barcode &amp; QR support.
+            </p>
+        </field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!--  TEMPLATE VARIABLES REFERENCE (QWeb page)                     -->
+    <!-- ============================================================ -->
+    <record id="receipt_template_variables_action" model="ir.actions.act_url">
+        <field name="name">Template Variables</field>
+        <field name="url">/pos_receipt_design/variables</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- ============================================================ -->
+    <!--  MENUS                                                        -->
+    <!-- ============================================================ -->
+    <menuitem id="menu_receipt_design_root"
+              name="Receipt Designs"
+              parent="point_of_sale.menu_point_config_product"
+              sequence="50"/>
+    <menuitem id="menu_receipt_design"
+              parent="menu_receipt_design_root"
+              action="receipt_design_action_window"
+              sequence="10"/>
+    <menuitem id="menu_receipt_design_category"
+              parent="menu_receipt_design_root"
+              action="action_receipt_design_category"
+              sequence="20"/>
+
+</odoo>

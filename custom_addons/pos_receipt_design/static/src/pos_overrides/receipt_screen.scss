@@ -1,0 +1,100 @@
+// POS Receipt Design Pro — Bebas Neue B&W Thermal Receipt Styles
+// This file is loaded in point_of_sale._assets_pos
+
+// ─── Bebas Neue Font Face ─────────────────────────────
+@font-face {
+  font-family: "Bebas Neue";
+  src: url("https://fonts.gstatic.com/s/bebasneue/v14/JTUSjIg69CK48gW7PXooxW4.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+.pos-custom-receipt {
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1.25;
+  color: #000;
+  background: #fff;
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+
+  // Ensure images never overflow thermal width
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  // Table resets for receipt grids
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th,
+  td {
+    padding: 1px 0;
+    vertical-align: top;
+  }
+
+  // Bebas Neue heading class
+  .bn {
+    font-family: "Bebas Neue", "Impact", "Arial Narrow", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    line-height: 1;
+  }
+
+  // Body text class
+  .bd {
+    font-family: "Helvetica Neue", "Arial", sans-serif;
+    letter-spacing: 0;
+  }
+}
+
+// ─── @media print — thermal printer overrides ─────────
+@media print {
+  body {
+    background: white;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .pos,
+  .pos * {
+    position: static !important;
+  }
+
+  .render-container .pos-receipt,
+  .render-container .pos-receipt * {
+    visibility: visible;
+    background: white !important;
+    color: black !important;
+  }
+
+  .render-container .pos-receipt {
+    margin: 0 auto !important;
+    padding: 2px 0 !important;
+    border: none !important;
+    font-size: 12px !important;
+    width: 280px !important;
+  }
+
+  .render-container {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+  }
+
+  .o-main-components-container {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+  }
+}

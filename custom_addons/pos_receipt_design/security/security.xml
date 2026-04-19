@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Multi-Company Record Rules -->
+    <record id="receipt_design_comp_rule" model="ir.rule">
+        <field name="name">Receipt Design: Multi-Company</field>
+        <field name="model_id" ref="model_receipt_design"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="receipt_design_category_comp_rule" model="ir.rule">
+        <field name="name">Receipt Category: Multi-Company</field>
+        <field name="model_id" ref="model_receipt_design_category"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="receipt_analytics_comp_rule" model="ir.rule">
+        <field name="name">Receipt Analytics: Multi-Company</field>
+        <field name="model_id" ref="model_receipt_design_analytics"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

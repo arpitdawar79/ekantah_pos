@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!--  POS Settings  — inject into interface section                -->
+    <!-- ============================================================ -->
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.form.inherit.pos_receipt_design</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="point_of_sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='pos_interface_section']" position="inside">
+                <setting id="use_custom_receipt"
+                         string="Custom Receipt Design"
+                         help="Replace the default POS receipt with a custom template.">
+                    <field name="use_custom_receipt"/>
+                    <div invisible="not use_custom_receipt" class="mt-4">
+                        <label for="receipt_design_id" string="Receipt Template" class="o_form_label"/>
+                        <field name="receipt_design_id" class="oe_inline"/>
+                    </div>
+                    <div invisible="not use_custom_receipt" class="mt-2">
+                        <label for="receipt_auto_print" string="Auto Print" class="o_form_label"/>
+                        <field name="receipt_auto_print"/>
+                    </div>
+                    <div invisible="not use_custom_receipt" class="mt-2">
+                        <label for="receipt_show_logo" string="Show Logo" class="o_form_label"/>
+                        <field name="receipt_show_logo"/>
+                    </div>
+                    <div invisible="not use_custom_receipt" class="mt-4">
+                        <label for="receipt_show_upi_qr" string="Show UPI QR Code" class="o_form_label"/>
+                        <field name="receipt_show_upi_qr"/>
+                    </div>
+                    <div invisible="not receipt_show_upi_qr" class="mt-2 ms-4">
+                        <label for="upi_id" string="UPI ID" class="o_form_label"/>
+                        <field name="upi_id" placeholder="e.g., 9873505995@ptsbi"/>
+                    </div>
+                    <div invisible="not receipt_show_upi_qr" class="mt-2 ms-4">
+                        <label for="upi_merchant_name" string="Merchant Name" class="o_form_label"/>
+                        <field name="upi_merchant_name" placeholder="e.g., Akshat Dawar"/>
+                    </div>
+                    <div invisible="not receipt_show_upi_qr" class="mt-2 ms-4">
+                        <label for="upi_payment_note" string="Payment Note" class="o_form_label"/>
+                        <field name="upi_payment_note" placeholder="e.g., Tony's Cafe Bill Payment"/>
+                    </div>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

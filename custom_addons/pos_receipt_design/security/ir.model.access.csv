@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_receipt_design_user,receipt.design.user,model_receipt_design,point_of_sale.group_pos_user,1,0,0,0
+access_receipt_design_manager,receipt.design.manager,model_receipt_design,point_of_sale.group_pos_manager,1,1,1,1
+access_receipt_design_category_user,receipt.design.category.user,model_receipt_design_category,point_of_sale.group_pos_user,1,0,0,0
+access_receipt_design_category_manager,receipt.design.category.manager,model_receipt_design_category,point_of_sale.group_pos_manager,1,1,1,1
+access_receipt_analytics_user,receipt.design.analytics.user,model_receipt_design_analytics,point_of_sale.group_pos_user,1,0,1,0
+access_receipt_analytics_manager,receipt.design.analytics.manager,model_receipt_design_analytics,point_of_sale.group_pos_manager,1,1,1,1
+access_receipt_import_wizard,receipt.design.import.wizard,model_receipt_design_import_wizard,point_of_sale.group_pos_manager,1,1,1,1

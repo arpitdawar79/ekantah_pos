@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="receipt_design_import_wizard_form" model="ir.ui.view">
+        <field name="name">receipt.design.import.wizard.form</field>
+        <field name="model">receipt.design.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Receipt Design">
+                <sheet>
+                    <group>
+                        <field name="filename" invisible="1"/>
+                        <field name="import_mode" widget="radio"/>
+                        <field name="import_file" filename="filename"/>
+                        <field name="target_design"
+                               invisible="import_mode == 'create'"
+                               required="import_mode == 'update'"/>
+                    </group>
+                    <div class="alert alert-info" role="alert">
+                        <p><strong>Supported format:</strong> JSON files exported from this module.</p>
+                        <p>The file must contain at minimum a <code>receipt_design</code> key with valid OWL XML.</p>
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_import" string="Import"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_receipt_design_import" model="ir.actions.act_window">
+        <field name="name">Import Receipt Design</field>
+        <field name="res_model">receipt.design.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menu entry under Receipt Designs -->
+    <menuitem id="menu_receipt_import"
+              name="Import Design"
+              parent="menu_receipt_design_root"
+              action="action_receipt_design_import"
+              sequence="40"/>
+
+</odoo>

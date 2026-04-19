@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- List View -->
+    <record id="receipt_analytics_tree" model="ir.ui.view">
+        <field name="name">receipt.design.analytics.list</field>
+        <field name="model">receipt.design.analytics</field>
+        <field name="arch" type="xml">
+            <list string="Usage Analytics">
+                <field name="date"/>
+                <field name="design_id"/>
+                <field name="pos_config_id"/>
+                <field name="pos_session_id"/>
+                <field name="order_id"/>
+                <field name="print_triggered"/>
+                <field name="reprint_count"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="receipt_analytics_search" model="ir.ui.view">
+        <field name="name">receipt.design.analytics.search</field>
+        <field name="model">receipt.design.analytics</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="design_id"/>
+                <field name="pos_config_id"/>
+                <separator/>
+                <filter string="Today" name="today"
+                        domain="[('date', '>=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="This Week" name="week"
+                        domain="[('date', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <filter string="This Month" name="month"
+                        domain="[('date', '>=', (context_today() - datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <separator string="Group By"/>
+                <group>
+                    <filter string="Design" name="group_design" context="{'group_by': 'design_id'}"/>
+                    <filter string="POS Config" name="group_config" context="{'group_by': 'pos_config_id'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Graph View -->
+    <record id="receipt_analytics_graph" model="ir.ui.view">
+        <field name="name">receipt.design.analytics.graph</field>
+        <field name="model">receipt.design.analytics</field>
+        <field name="arch" type="xml">
+            <graph string="Receipt Usage" type="bar">
+                <field name="date" interval="day"/>
+                <field name="design_id"/>
+                <field name="print_triggered" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Pivot View -->
+    <record id="receipt_analytics_pivot" model="ir.ui.view">
+        <field name="name">receipt.design.analytics.pivot</field>
+        <field name="model">receipt.design.analytics</field>
+        <field name="arch" type="xml">
+            <pivot string="Receipt Analytics">
+                <field name="date" type="row"/>
+                <field name="design_id" type="col"/>
+                <field name="print_triggered" type="measure"/>
+                <field name="reprint_count" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_receipt_analytics" model="ir.actions.act_window">
+        <field name="name">Receipt Analytics</field>
+        <field name="res_model">receipt.design.analytics</field>
+        <field name="view_mode">list,graph,pivot</field>
+        <field name="search_view_id" ref="receipt_analytics_search"/>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_receipt_analytics"
+              name="Analytics"
+              parent="menu_receipt_design_root"
+              action="action_receipt_analytics"
+              sequence="30"/>
+
+</odoo>
