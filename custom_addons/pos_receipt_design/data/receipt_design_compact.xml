@@ -13,65 +13,68 @@
         <field name="author">Ekantah</field>
         <field name="notes">Thermal printer optimized Bebas Neue design with bold compact layout and modern line items.</field>
         <field name="receipt_design"><![CDATA[
-<div class="pos-receipt" style="width:280px;font-family:'Helvetica Neue','Arial',sans-serif;color:#000;background:#fff;padding:10px;margin:0;line-height:1.1;letter-spacing:0;">
+<div class="pos-receipt" style="width:280px;font-family:'Helvetica Neue','Arial',sans-serif;color:#000;background:#fff;padding:4px;margin:0;line-height:1.15;letter-spacing:0;">
 
-    <!-- ═══ HEADER BAR ═══ -->
-    <div style="background:#000;color:#fff;text-align:center;padding:2px 0;">
-        <span style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:9px;letter-spacing:2px;"><t t-esc="receipt.date"/> | #<t t-esc="receipt.name"/></span>
-    </div>
-
-    <!-- COMPANY -->
-    <t t-if="props.data.headerData.company">
-        <div style="text-align:center;padding:2px 0;">
+    <!-- ═══ HEADER ═══ -->
+    <div style="text-align:center;padding:2px 0;border-bottom:2px solid #000;">
+        <t t-if="props.data.headerData.company">
             <img t-attf-src="/web/image?model=res.company&amp;id={{props.data.headerData.company.id}}&amp;field=logo"
                  alt="Logo" style="max-width:60px;max-height:30px;"/>
             <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:20px;font-weight:700;letter-spacing:2px;color:#000;line-height:1;" t-esc="props.data.headerData.company.name"/>
-            <div style="font-size:8px;color:#000;">
+            <div style="font-size:10px;color:#000;">
                 <t t-if="props.data.headerData.company.phone"><t t-esc="props.data.headerData.company.phone"/></t>
             </div>
-        </div>
-    </t>
-
-    <!-- META -->
-    <div style="font-size:8px;font-weight:700;color:#000;padding:2px 0;border-top:1px solid #000;border-bottom:1px solid #000;">
-        <t t-if="receipt.cashier">CASHIER: <span t-esc="receipt.cashier"/></t>
-        <t t-if="props.data.headerData.table"> | TABLE: <span style="font-weight:700;" t-esc="props.data.headerData.table"/>
-            <t t-if="props.data.headerData.customer_count"> | <t t-esc="props.data.headerData.customer_count"/> GSTS</t>
         </t>
-        <t t-if="receipt.partner"> | CUST: <span t-esc="receipt.partner.name"/></t>
+    </div>
+
+    <!-- ORDER META — HUMAN READABLE -->
+    <div style="padding:2px 0;border-bottom:1px solid #000;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;color:#000;">
+                ORDER <span t-esc="receipt.name"/>
+            </div>
+            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:11px;letter-spacing:1px;color:#000;" t-esc="receipt.date"/>
+        </div>
+        <div style="font-size:10px;font-weight:700;color:#000;margin-top:1px;">
+            <t t-if="receipt.cashier">CASHIER: <span t-esc="receipt.cashier"/></t>
+            <t t-if="props.data.headerData.table"> · TABLE: <span style="font-weight:700;" t-esc="props.data.headerData.table"/>
+                <t t-if="props.data.headerData.customer_count"> · <t t-esc="props.data.headerData.customer_count"/> GSTS</t>
+            </t>
+            <t t-if="receipt.partner"> · CUST: <span t-esc="receipt.partner.name"/></t>
+        </div>
     </div>
     <t t-if="receipt.company and receipt.company.header">
-        <div style="font-size:8px;color:#000;padding:1px 0;" t-esc="receipt.company.header"/>
+        <div style="font-size:10px;color:#000;padding:1px 0;" t-esc="receipt.company.header"/>
     </t>
 
-    <!-- ═══ ITEMS — ULTRA COMPACT ═══ -->
+    <!-- ═══ ITEMS ═══ -->
     <div style="border-top:2px solid #000;margin-top:1px;padding-top:1px;">
-        <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:10px;letter-spacing:3px;color:#000;border-bottom:1px solid #000;padding-bottom:1px;">ITEMS</div>
+        <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:13px;letter-spacing:3px;color:#000;border-bottom:1px solid #000;padding-bottom:1px;">ITEMS</div>
 
         <t t-foreach="receipt.orderlines" t-as="line" t-key="line.id">
-            <div style="padding:1px 0;border-bottom:1px dotted #000;">
+            <div style="padding:1px 0;border-bottom:1px solid #000;">
                 <div style="display:flex;justify-content:space-between;align-items:baseline;">
-                    <div style="font-size:10px;font-weight:700;color:#000;flex:1;padding-right:2px;line-height:1.1;">
+                    <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:13px;font-weight:700;color:#000;flex:1;padding-right:2px;line-height:1.15;">
                         <span t-esc="line.productName"/>
                     </div>
-                    <div style="font-size:11px;font-weight:700;color:#000;white-space:nowrap;" t-esc="line.price"/>
+                    <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:14px;font-weight:700;color:#000;white-space:nowrap;" t-esc="line.price"/>
                 </div>
-                <div style="font-size:7px;font-weight:400;color:#000;">
+                <div style="font-size:10px;font-weight:700;color:#000;">
                     <span t-esc="line.qty"/><span t-if="line.unit and line.unit !== 'Units'" t-esc="line.unit"/> &#215; <span t-esc="line.unitPrice"/>
-                    <t t-if="line.discount > 0"> | <span style="font-weight:700;"><t t-esc="line.discount"/>% OFF</span></t>
+                    <t t-if="line.discount > 0"> · <span style="font-weight:700;"><t t-esc="line.discount"/>% OFF</span></t>
                 </div>
                 <t t-if="line.customerNote">
-                    <div style="font-size:7px;color:#000;border-left:2px solid #000;padding-left:2px;" t-esc="line.customerNote"/>
+                    <div style="font-size:10px;color:#000;border-left:2px solid #000;padding-left:2px;" t-esc="line.customerNote"/>
                 </t>
                 <t t-if="line.l10n_in_hsn_code and props.data.headerData.company.country_id and props.data.headerData.company.country_id.code === 'IN'">
-                    <div style="font-size:6px;color:#000;">HSN: <t t-esc="line.l10n_in_hsn_code"/></div>
+                    <div style="font-size:10px;color:#000;">HSN: <t t-esc="line.l10n_in_hsn_code"/></div>
                 </t>
             </div>
         </t>
 
         <t t-if="props.data.generalNote">
-            <div style="font-size:7px;font-weight:700;color:#000;margin-top:1px;padding:1px;border-left:2px solid #000;">
-                NOTE: <span style="font-weight:400;" t-esc="props.data.generalNote"/>
+            <div style="font-size:10px;font-weight:700;color:#000;margin-top:1px;padding:1px;border-left:2px solid #000;">
+                NOTE: <span style="font-weight:700;" t-esc="props.data.generalNote"/>
             </div>
         </t>
     </div>
@@ -80,26 +83,26 @@
     <t t-set="taxincluded" t-value="Math.abs(receipt.total_without_tax - receipt.amount_total) &lt;= 0.000001"/>
     <div style="border-top:1px solid #000;margin-top:1px;padding-top:1px;">
         <t t-if="!taxincluded">
-            <div style="display:flex;justify-content:space-between;font-size:9px;font-weight:700;color:#000;">
+            <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:#000;">
                 <span>SUBTOTAL</span>
                 <span t-esc="utils.formatCurrency(receipt.total_without_tax, currency)"/>
             </div>
             <t t-foreach="receipt.tax_details" t-as="tax" t-key="tax.name">
-                <div style="display:flex;justify-content:space-between;font-size:7px;font-weight:400;color:#000;">
+                <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:#000;">
                     <span t-esc="tax.name"/>
                     <span t-esc="utils.formatCurrency(tax.amount, currency)"/>
                 </div>
             </t>
         </t>
         <t t-if="receipt.total_discount">
-            <div style="display:flex;justify-content:space-between;font-size:8px;font-weight:700;color:#000;margin-top:1px;padding-top:1px;border-top:1px dotted #000;">
+            <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:#000;margin-top:1px;padding-top:1px;border-top:1px solid #000;">
                 <span>DISCOUNT</span>
                 <span>-<span t-esc="utils.formatCurrency(receipt.total_discount, currency)"/></span>
             </div>
         </t>
         <t t-if="taxincluded">
             <t t-foreach="receipt.tax_details" t-as="tax" t-key="tax.name">
-                <div style="display:flex;justify-content:space-between;font-size:7px;font-weight:400;color:#000;">
+                <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:#000;">
                     <span t-esc="tax.name"/>
                     <span t-esc="utils.formatCurrency(tax.amount, currency)"/>
                 </div>
@@ -108,28 +111,28 @@
     </div>
 
     <!-- ═══ TOTAL ═══ -->
-    <div style="background:#000;color:#fff;padding:3px 4px;margin-top:2px;display:flex;justify-content:space-between;align-items:baseline;">
-        <span style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:10px;letter-spacing:2px;">TOTAL</span>
-        <span style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:20px;font-weight:700;letter-spacing:1px;" t-esc="utils.formatCurrency(receipt.amount_total, currency)"/>
+    <div style="border-top:3px solid #000;border-bottom:3px solid #000;padding:2px 0;margin-top:1px;display:flex;justify-content:space-between;align-items:baseline;">
+        <span style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:11px;letter-spacing:2px;color:#000;">TOTAL</span>
+        <span style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:22px;font-weight:700;letter-spacing:1px;color:#000;" t-esc="utils.formatCurrency(receipt.amount_total, currency)"/>
     </div>
 
     <!-- ROUNDING -->
     <t t-if="receipt.order_rounding">
-        <div style="text-align:center;font-size:8px;font-weight:700;color:#000;margin:1px 0;">
-            RND: <span t-esc="utils.formatCurrency(receipt.order_rounding, currency)"/> | PAY: <span t-esc="utils.formatCurrency(receipt.amount_total + receipt.order_rounding, currency)"/>
+        <div style="text-align:center;font-size:10px;font-weight:700;color:#000;margin:1px 0;">
+            ROUNDING: <span t-esc="utils.formatCurrency(receipt.order_rounding, currency)"/> | PAY: <span t-esc="utils.formatCurrency(receipt.amount_total + receipt.order_rounding, currency)"/>
         </div>
     </t>
 
     <!-- ═══ PAYMENT ═══ -->
     <div style="border-top:1px solid #000;margin-top:1px;padding-top:1px;">
-        <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:9px;letter-spacing:2px;color:#000;">PAYMENT</div>
+        <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:11px;letter-spacing:2px;color:#000;">PAYMENT</div>
         <t t-foreach="receipt.paymentlines" t-as="line" t-key="line.cid">
-            <div style="display:flex;justify-content:space-between;font-size:8px;font-weight:600;color:#000;">
+            <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:600;color:#000;">
                 <span t-esc="line.name"/>
                 <span style="font-weight:700;" t-esc="utils.formatCurrency(line.amount, currency)"/>
             </div>
         </t>
-        <div style="display:flex;justify-content:space-between;font-size:9px;font-weight:700;color:#000;margin-top:1px;padding-top:1px;border-top:1px dotted #000;">
+        <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:#000;margin-top:1px;padding-top:1px;border-top:1px solid #000;">
             <span>CHANGE</span>
             <span t-esc="utils.formatCurrency(receipt.change, currency)"/>
         </div>
@@ -138,29 +141,29 @@
     <!-- UPI QR CODE -->
     <t t-if="pos.config.receipt_show_upi_qr and utils.generateQRCodeUrl(receipt.amount_total)">
         <div style="text-align:center;margin:2px 0;padding:1px 0;border-top:1px solid #000;">
-            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:8px;letter-spacing:2px;color:#000;">SCAN TO PAY</div>
-            <img t-att-src="utils.generateQRCodeUrl(receipt.amount_total)" style="width:100px;height:100px;" alt="UPI QR"/>
+            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:10px;letter-spacing:2px;color:#000;">SCAN TO PAY</div>
+            <img t-att-src="utils.generateQRCodeUrl(receipt.amount_total)" style="width:150px;height:150px;" alt="UPI QR"/>
         </div>
     </t>
 
     <!-- LOYALTY -->
     <t t-foreach="receipt.loyaltyStats or []" t-as="stat" t-key="stat.couponId">
         <t t-if="stat.program and stat.program.portal_visible and (stat.points.won || stat.points.spent)">
-            <div style="border-top:1px solid #000;margin-top:1px;padding-top:1px;">
-                <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:9px;letter-spacing:2px;color:#000;text-align:center;">LOYALTY</div>
+            <div style="border-top:2px solid #000;margin-top:1px;padding-top:1px;">
+                <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:11px;letter-spacing:2px;color:#000;text-align:center;">LOYALTY</div>
                 <t t-if="stat.points.won">
-                    <div style="display:flex;justify-content:space-between;font-size:8px;font-weight:700;color:#000;">
+                    <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:#000;">
                         <span>+<t t-esc="stat.points.won"/> <t t-esc="stat.points.name"/></span><span>EARNED</span>
                     </div>
                 </t>
                 <t t-if="stat.points.spent">
-                    <div style="display:flex;justify-content:space-between;font-size:8px;font-weight:600;color:#000;">
+                    <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:600;color:#000;">
                         <span>-<t t-esc="stat.points.spent"/> <t t-esc="stat.points.name"/></span><span>USED</span>
                     </div>
                 </t>
                 <t t-if="stat.points.balance">
-                    <div style="display:flex;justify-content:space-between;font-size:8px;font-weight:700;color:#000;border-top:1px dotted #000;margin-top:1px;padding-top:1px;">
-                        <span>BAL</span><span><t t-esc="stat.points.balance"/> <t t-esc="stat.points.name"/></span>
+                    <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:#000;border-top:1px solid #000;margin-top:1px;padding-top:1px;">
+                        <span>BALANCE</span><span><t t-esc="stat.points.balance"/> <t t-esc="stat.points.name"/></span>
                     </div>
                 </t>
             </div>
@@ -169,22 +172,22 @@
 
     <!-- CUSTOMER -->
     <t t-if="receipt.partner">
-        <div style="text-align:center;margin:1px 0;padding:1px 0;border-top:1px solid #000;">
-            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:7px;letter-spacing:2px;color:#000;">CUSTOMER</div>
-            <div style="font-size:10px;font-weight:700;color:#000;" t-esc="receipt.partner.name"/>
+        <div style="text-align:center;padding:1px 0;border-top:1px solid #000;">
+            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:10px;letter-spacing:2px;color:#000;">CUSTOMER</div>
+            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:13px;font-weight:700;color:#000;" t-esc="receipt.partner.name"/>
         </div>
     </t>
 
     <!-- COUPONS -->
     <t t-if="receipt.new_coupon_info and receipt.new_coupon_info.length">
         <div style="border-top:1px solid #000;margin-top:1px;padding-top:1px;">
-            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:9px;letter-spacing:2px;color:#000;text-align:center;">COUPONS</div>
+            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:11px;letter-spacing:2px;color:#000;text-align:center;">COUPONS</div>
             <t t-foreach="receipt.new_coupon_info" t-as="coupon" t-key="coupon.code">
-                <div style="text-align:center;padding:1px 0;border-bottom:1px dotted #000;">
-                    <div style="font-size:9px;font-weight:700;color:#000;" t-esc="coupon.program_name"/>
-                    <div style="font-size:6px;color:#000;">VALID: <t t-if="coupon.expiration_date" t-esc="coupon.expiration_date"/><t t-else="">N/A</t></div>
+                <div style="text-align:center;padding:1px 0;border-bottom:1px solid #000;">
+                    <div style="font-size:10px;font-weight:700;color:#000;" t-esc="coupon.program_name"/>
+                    <div style="font-size:10px;color:#000;">VALID: <t t-if="coupon.expiration_date" t-esc="coupon.expiration_date"/><t t-else="">N/A</t></div>
                     <img t-att-src="'/report/barcode/Code128/' + coupon.code" style="width:130px;height:28px;" alt="Barcode"/>
-                    <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:10px;letter-spacing:1px;color:#000;" t-esc="coupon.code"/>
+                    <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:12px;letter-spacing:1px;color:#000;" t-esc="coupon.code"/>
                 </div>
             </t>
         </div>
@@ -193,35 +196,35 @@
     <!-- QR -->
     <t t-if="receipt.pos_qr_code">
         <div style="text-align:center;padding:1px 0;border-top:1px solid #000;">
-            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:8px;letter-spacing:2px;color:#000;">INVOICE QR</div>
+            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:10px;letter-spacing:2px;color:#000;">INVOICE QR</div>
             <div t-if="props.data.headerData.company and ['qr_code','qr_code_and_url'].includes(props.data.headerData.company.point_of_sale_ticket_portal_url_display_mode)">
                 <img t-att-src="receipt.pos_qr_code" style="max-width:70px;" alt="QR"/>
             </div>
-            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:10px;letter-spacing:1px;color:#000;"><t t-esc="receipt.ticket_code"/></div>
+            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:11px;letter-spacing:1px;color:#000;"><t t-esc="receipt.ticket_code"/></div>
         </div>
     </t>
 
     <!-- HSN SUMMARY (India) -->
     <t t-set="l10n_in_hsn_summary" t-value="props.data.l10n_in_hsn_summary"/>
     <t t-if="l10n_in_hsn_summary and props.data.headerData.company.country_id and props.data.headerData.company.country_id.code === 'IN' and l10n_in_hsn_summary.items and l10n_in_hsn_summary.items.length > 0">
-        <div style="border-top:1px solid #000;margin-top:1px;padding-top:1px;">
-            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:9px;letter-spacing:2px;color:#000;text-align:center;">HSN</div>
-            <table style="width:100%;font-size:7px;color:#000;">
+        <div style="border-top:2px solid #000;margin-top:1px;padding-top:1px;">
+            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:11px;letter-spacing:2px;color:#000;text-align:center;">HSN</div>
+            <table style="width:100%;font-size:10px;color:#000;">
                 <tr style="border-bottom:1px solid #000;">
-                    <th style="padding:0;text-align:center;font-weight:700;">HSN</th>
-                    <th style="padding:0;text-align:center;font-weight:700;">%</th>
-                    <th style="padding:0;text-align:center;font-weight:700;">CGST</th>
-                    <th style="padding:0;text-align:center;font-weight:700;">SGST</th>
-                    <th t-if="l10n_in_hsn_summary.has_igst" style="padding:0;text-align:center;font-weight:700;">IGST</th>
-                    <th t-if="l10n_in_hsn_summary.has_cess" style="padding:0;text-align:center;font-weight:700;">CESS</th>
+                    <th style="padding:1px;text-align:center;font-weight:700;">HSN</th>
+                    <th style="padding:1px;text-align:center;font-weight:700;">%</th>
+                    <th style="padding:1px;text-align:center;font-weight:700;">CGST</th>
+                    <th style="padding:1px;text-align:center;font-weight:700;">SGST</th>
+                    <th t-if="l10n_in_hsn_summary.has_igst" style="padding:1px;text-align:center;font-weight:700;">IGST</th>
+                    <th t-if="l10n_in_hsn_summary.has_cess" style="padding:1px;text-align:center;font-weight:700;">CESS</th>
                 </tr>
-                <tr t-foreach="l10n_in_hsn_summary.items" t-as="item" t-key="item_index">
-                    <td style="padding:0;text-align:center;" t-out="item.l10n_in_hsn_code"/>
-                    <td style="padding:0;text-align:center;"><t t-out="item.rate"/>%</td>
-                    <td style="padding:0;text-align:center;" t-out="item.tax_amount_cgst"/>
-                    <td style="padding:0;text-align:center;" t-out="item.tax_amount_sgst"/>
-                    <td t-if="l10n_in_hsn_summary.has_igst" style="padding:0;text-align:center;" t-out="item.tax_amount_igst"/>
-                    <td t-if="l10n_in_hsn_summary.has_cess" style="padding:0;text-align:center;" t-out="item.tax_amount_cess"/>
+                <tr t-foreach="l10n_in_hsn_summary.items" t-as="item" t-key="item_index" style="border-bottom:1px solid #000;">
+                    <td style="padding:1px;text-align:center;" t-out="item.l10n_in_hsn_code"/>
+                    <td style="padding:1px;text-align:center;"><t t-out="item.rate"/>%</td>
+                    <td style="padding:1px;text-align:center;" t-out="item.tax_amount_cgst"/>
+                    <td style="padding:1px;text-align:center;" t-out="item.tax_amount_sgst"/>
+                    <td t-if="l10n_in_hsn_summary.has_igst" style="padding:1px;text-align:center;" t-out="item.tax_amount_igst"/>
+                    <td t-if="l10n_in_hsn_summary.has_cess" style="padding:1px;text-align:center;" t-out="item.tax_amount_cess"/>
                 </tr>
             </table>
         </div>
@@ -229,42 +232,43 @@
 
     <!-- LOCALISATIONS -->
     <t t-if="props.data.l10n_co_dian !== false and props.data.headerData.company and props.data.headerData.company.country_id and props.data.headerData.company.country_id.code === 'CO'">
-        <div style="word-wrap:break-word;text-align:center;font-size:6px;color:#000;padding:1px 0;" t-esc="props.data.l10n_co_dian"/>
+        <div style="word-wrap:break-word;text-align:center;font-size:10px;color:#000;padding:1px 0;" t-esc="props.data.l10n_co_dian"/>
     </t>
     <t t-if="props.data.l10n_es_pos_tbai_qrsrc">
         <div style="text-align:center;padding:1px 0;">
-            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:7px;letter-spacing:1px;color:#000;">TBAI</div>
+            <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:10px;letter-spacing:1px;color:#000;">TBAI</div>
             <img t-att-src="props.data.l10n_es_pos_tbai_qrsrc" style="max-width:70px;" alt="TBAI"/>
         </div>
     </t>
     <t t-if="props.data.l10n_fr_hash !== false">
-        <div style="word-wrap:break-word;font-size:6px;color:#000;padding:1px 0;" t-out="props.data.l10n_fr_hash"/>
+        <div style="word-wrap:break-word;font-size:10px;color:#000;padding:1px 0;" t-out="props.data.l10n_fr_hash"/>
     </t>
 
     <!-- FOOTER -->
-    <div t-if="receipt.footer_html" style="text-align:center;font-size:7px;color:#000;padding-top:1px;margin-top:1px;border-top:1px solid #000;" t-out="receipt.footer_html"/>
-    <div t-if="!receipt.footer_html and receipt.footer" style="text-align:center;font-size:7px;color:#000;padding-top:1px;margin-top:1px;border-top:1px solid #000;" t-esc="receipt.footer"/>
+    <div t-if="receipt.footer_html" style="text-align:center;font-size:10px;color:#000;padding-top:1px;margin-top:1px;border-top:1px solid #000;" t-out="receipt.footer_html"/>
+    <div t-if="!receipt.footer_html and receipt.footer" style="text-align:center;font-size:10px;color:#000;padding-top:1px;margin-top:1px;border-top:1px solid #000;" t-esc="receipt.footer"/>
 
     <!-- TERMINAL -->
     <div style="margin-top:1px;">
         <t t-foreach="receipt.paymentlines" t-as="pline" t-key="pline_index">
             <t t-if="pline.ticket">
-                <div style="border:1px solid #000;padding:1px;font-size:6px;color:#000;"><t t-out="pline.ticket"/></div>
+                <div style="border:1px solid #000;padding:1px;font-size:10px;color:#000;"><t t-out="pline.ticket"/></div>
             </t>
         </t>
     </div>
 
     <t t-if="props.data.shippingDate">
-        <div style="font-size:7px;font-weight:700;text-align:center;padding:1px 0;border-top:1px solid #000;color:#000;">
+        <div style="font-size:10px;font-weight:700;text-align:center;padding:1px 0;border-top:1px solid #000;color:#000;">
             DELIVERY: <span t-esc="props.data.shippingDate"/>
         </div>
     </t>
 
     <!-- ═══ THANK YOU ═══ -->
-    <div style="text-align:center;padding-top:2px;border-top:2px solid #000;">
-        <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:14px;font-weight:700;letter-spacing:3px;color:#000;line-height:1;">THANK YOU</div>
-        <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:7px;letter-spacing:1px;color:#000;">VISIT AGAIN</div>
+    <div style="text-align:center;padding-top:2px;border-top:3px solid #000;">
+        <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:16px;font-weight:700;letter-spacing:3px;color:#000;line-height:1;">THANK YOU</div>
+        <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:10px;letter-spacing:1px;color:#000;">VISIT AGAIN</div>
     </div>
+    <div style="border-top:3px solid #000;"></div>
 </div>
 ]]></field>
     </record>
