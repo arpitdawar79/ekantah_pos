@@ -71,7 +71,7 @@
                     <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:13px;font-weight:700;color:#000;flex:1;padding-right:4px;line-height:1.15;">
                         <span t-esc="line.productName"/>
                     </div>
-                    <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:14px;font-weight:700;color:#000;white-space:nowrap;" t-esc="line.price"/>
+                    <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:14px;font-weight:700;color:#000;white-space:nowrap;" t-esc="line.price_without_tax"/>
                 </div>
                 <div style="font-size:10px;font-weight:700;color:#000;">
                     <span t-esc="line.qty"/><span t-if="line.unit and line.unit !== 'Units'" t-esc="line.unit"/> &#215; <span t-esc="line.unitPrice"/>

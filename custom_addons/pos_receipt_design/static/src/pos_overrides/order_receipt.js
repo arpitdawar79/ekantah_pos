@@ -178,6 +178,12 @@ function _buildReceiptShim(order) {
     unit: line.product_id?.uom_id?.name || "",
     unitPrice: format(line.price_unit ?? 0),
     price: format(line.price_subtotal_incl ?? line.getPriceWithTax?.() ?? 0),
+    price_without_tax: format(
+      line.price_subtotal ??
+        line.getPriceWithoutTax?.() ??
+        line.price_subtotal_incl - (line.price_tax ?? 0) ??
+        0,
+    ),
     discount: line.discount || 0,
     customerNote: line.customer_note || line.customerNote || "",
     l10n_in_hsn_code: line.product_id?.l10n_in_hsn_code || "",
