@@ -19,7 +19,7 @@
     <div style="text-align:center;padding:2px 0;border-bottom:2px solid #000;">
         <t t-if="props.data.headerData.company">
             <img t-attf-src="/web/image?model=res.company&amp;id={{props.data.headerData.company.id}}&amp;field=logo"
-                 alt="Logo" style="max-width:65px;max-height:35px;"/>
+                 alt="Logo" style="max-width:80%;padding-bottom: 20px;"/>
             <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:24px;font-weight:700;letter-spacing:3px;color:#000;line-height:1;" t-esc="props.data.headerData.company.name"/>
             <div style="font-size:10px;color:#000;margin-top:1px;">
                 <t t-if="props.data.headerData.company.phone"><t t-esc="props.data.headerData.company.phone"/></t>
