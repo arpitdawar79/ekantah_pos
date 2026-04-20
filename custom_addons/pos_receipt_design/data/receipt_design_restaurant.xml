@@ -60,7 +60,7 @@
     </t>
 
     <!-- ═══ ORDER ITEMS ═══ -->
-    <div style="border-top:2px solid #000;margin-top:1px;padding-top:1px;">
+    <div style="border-top:2px solid #000;margin-top:1px;padding-top:1px;padding-right:12px;">
         <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:13px;letter-spacing:4px;color:#000;border-bottom:1px solid #000;padding-bottom:1px;">
             YOUR ORDER
         </div>
@@ -95,7 +95,7 @@
 
     <!-- ═══ BILL SUMMARY ═══ -->
     <t t-set="taxincluded" t-value="Math.abs(receipt.total_without_tax - receipt.amount_total) &lt;= 0.000001"/>
-    <div style="border-top:1px solid #000;margin-top:1px;padding-top:1px;">
+    <div style="border-top:1px solid #000;margin-top:1px;padding-top:1px;padding-right:12px;">
         <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:11px;letter-spacing:3px;color:#000;text-align:center;">BILL SUMMARY</div>
 
         <t t-if="!taxincluded">
@@ -146,7 +146,7 @@
     </t>
 
     <!-- ═══ PAYMENT ═══ -->
-    <div style="border-top:1px solid #000;margin-top:1px;padding-top:1px;border-left:3px solid #000;padding-left:4px;">
+    <div style="border-top:1px solid #000;margin-top:1px;padding-top:1px;padding-right:12px;border-left:3px solid #000;padding-left:4px;">
         <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:11px;letter-spacing:2px;color:#000;">PAYMENT</div>
         <t t-foreach="receipt.paymentlines" t-as="line" t-key="line.cid">
             <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:600;color:#000;">

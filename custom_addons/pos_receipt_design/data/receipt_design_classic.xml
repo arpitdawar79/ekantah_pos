@@ -14,7 +14,7 @@
         <field name="author">Ekantah</field>
         <field name="notes">Bold Bebas Neue styled receipt with elaborate headers, modern line item format, and enhanced visual hierarchy.</field>
         <field name="receipt_design"><![CDATA[
-<div class="pos-receipt" style="font-family:'Helvetica Neue','Arial',sans-serif;color:#000;background:#fff;padding:4px 12px 4px 4px;margin:0;line-height:1.15;letter-spacing:0;">
+<div class="pos-receipt" style="font-family:'Helvetica Neue','Arial',sans-serif;color:#000;background:#fff;padding:4px 0px 4px 0px;margin:0;line-height:1.15;letter-spacing:0;">
 
     <!-- ═══ HEADER ═══ -->
     <div style="text-align:center;padding:2px 0;border-bottom:2px solid #000;">
@@ -61,7 +61,7 @@
     </div>
 
     <!-- ═══ ORDER LINES ═══ -->
-    <div style="border-top:2px solid #000;margin-top:1px;padding-top:1px;">
+    <div style="border-top:2px solid #000;margin-top:1px;padding-top:1px;padding-right:12px;">
         <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:13px;letter-spacing:4px;color:#000;border-bottom:1px solid #000;padding-bottom:1px;">
             YOUR ORDER
         </div>
@@ -101,7 +101,7 @@
 
     <!-- ═══ TAX / SUBTOTAL ═══ -->
     <t t-set="taxincluded" t-value="Math.abs(receipt.total_without_tax - receipt.amount_total) &lt;= 0.000001"/>
-    <div style="border-top:1px solid #000;margin-top:1px;padding-top:1px;">
+    <div style="border-top:1px solid #000;margin-top:1px;padding-top:1px;padding-right:12px;">
         <t t-if="!taxincluded">
             <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;color:#000;">
                 <span>SUBTOTAL</span>
@@ -150,7 +150,7 @@
     </t>
 
     <!-- ═══ PAYMENT ═══ -->
-    <div style="border-top:1px solid #000;margin-top:1px;padding-top:1px;">
+    <div style="border-top:1px solid #000;margin-top:1px;padding-top:1px;padding-right:12px;">
         <div style="font-family:'Bebas Neue','Impact','Arial Narrow',sans-serif;font-size:11px;letter-spacing:2px;color:#000;">PAYMENT</div>
         <t t-foreach="receipt.paymentlines" t-as="line" t-key="line.cid">
             <div style="display:flex;justify-content:space-between;font-size:10px;font-weight:600;color:#000;">
