@@ -166,28 +166,42 @@ function _buildReceiptShim(order) {
       : String(amount || 0);
 
   // Orderlines
-  const orderlines = (order.lines || []).map((line) => ({
-    id: line.id || line.uuid,
-    productName:
-      (typeof line.getFullProductName === "function" &&
-        line.getFullProductName()) ||
-      line.full_product_name ||
-      line.product_id?.display_name ||
-      "",
-    qty: line.qty ?? line.quantity ?? 0,
-    unit: line.product_id?.uom_id?.name || "",
-    unitPrice: format(line.price_unit ?? 0),
-    price: format(line.price_subtotal_incl ?? line.getPriceWithTax?.() ?? 0),
-    price_without_tax: format(
-      line.price_subtotal ??
-        line.getPriceWithoutTax?.() ??
-        line.price_subtotal_incl - (line.price_tax ?? 0) ??
-        0,
-    ),
-    discount: line.discount || 0,
-    customerNote: line.customer_note || line.customerNote || "",
-    l10n_in_hsn_code: line.product_id?.l10n_in_hsn_code || "",
-  }));
+  const orderlines = (order.lines || []).map((line) => {
+    const qty = line.qty ?? line.quantity ?? 0;
+    const unitPrice = line.price_unit ?? 0;
+    const discount = line.discount || 0;
+    // Fallback computation when Odoo 19 computed fields aren't loaded
+    const computedSubtotal = qty * unitPrice * (1 - discount / 100);
+
+    return {
+      id: line.id || line.uuid,
+      productName:
+        (typeof line.getFullProductName === "function" &&
+          line.getFullProductName()) ||
+        line.full_product_name ||
+        line.product_id?.display_name ||
+        "",
+      qty,
+      unit: line.product_id?.uom_id?.name || "",
+      unitPrice: format(unitPrice),
+      price: format(
+        line.price_subtotal_incl ??
+          line.getPriceWithTax?.() ??
+          line.price_subtotal ??
+          computedSubtotal ??
+          0,
+      ),
+      price_without_tax: format(
+        line.price_subtotal ??
+          line.getPriceWithoutTax?.() ??
+          computedSubtotal ??
+          0,
+      ),
+      discount,
+      customerNote: line.customer_note || line.customerNote || "",
+      l10n_in_hsn_code: line.product_id?.l10n_in_hsn_code || "",
+    };
+  });
 
   // Payment lines (exclude "change" line)
   const paymentlines = (order.payment_ids || [])
@@ -212,10 +226,28 @@ function _buildReceiptShim(order) {
     }
   }
 
-  const amountTotal = order.amount_total ?? order.getTotalWithTax?.() ?? 0;
-  const amountTax = order.amount_tax ?? order.getTotalTax?.() ?? 0;
+  const taxAmountFromDetails = taxLines.reduce(
+    (sum, t) => sum + (t.amount || 0),
+    0,
+  );
+
   const totalWithoutTax =
-    order.priceExcl ?? order.getTotalWithoutTax?.() ?? amountTotal - amountTax;
+    order.priceExcl ??
+    order.prices?.totalWithoutTax ??
+    order.getTotalWithoutTax?.() ??
+    0;
+  const amountTax =
+    order.amount_tax ??
+    order.prices?.taxAmount ??
+    order.getTotalTax?.() ??
+    taxAmountFromDetails ??
+    0;
+  const amountTotal =
+    order.amount_total ??
+    order.prices?.totalWithTax ??
+    order.getTotalWithTax?.() ??
+    totalWithoutTax + amountTax ??
+    0;
 
   return {
     name: order.pos_reference || order.name || order.trackingNumber || "",
